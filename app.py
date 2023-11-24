@@ -14,13 +14,14 @@ def welcome():
         enc=True
         finalTxt=encTxt
     else:
-        txt=txt.split(';')
-        x=math.sqrt(len(txt))
-        xtxt=[[]]*x
-        k=0
-        for i in range(x):
-            for j in range(x):
-                xtxt[i][j]=txt[k]
+        txt=txt.split(':')
+        tmparr=[]
+        for i in txt:
+            tmparr.append(i.split(';'))
+        for i in range(len(tmparr)):
+            for j in range(len(tmparr[i])):
+                tmparr[i][j]=int(tmparr[i][j])
+        txt=tmparr
         decTxt=decrypt(txt,key)
         enc=False
         finalTxt=decTxt

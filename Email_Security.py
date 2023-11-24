@@ -1,9 +1,6 @@
 import math
-from telnetlib import KERMIT
-from cv2 import DrawMatchesFlags_DRAW_RICH_KEYPOINTS
 import numpy as np
 import random
-import timeit
 
 def adjoint_matrix(matrix):
 
@@ -132,7 +129,7 @@ def decrypt(keyMsg,Key):
 
     #printing deciphered Message
     final.append(decrepted_Message)
-    return decrepted_Message
+    return decrepted_Message.strip()
 
 def main():
     decrypt(encrypt("Hello User",123),123)

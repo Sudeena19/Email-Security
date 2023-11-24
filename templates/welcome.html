@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if enc %}
+        <center>Encrypted Matrix</center>
+        <center>
+            <table border="3px" style="border-collapse:collapse;">
+                {% for row in txt%}
+                    <tr>
+                        {% for val in row %}
+                            <td>{{val}}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </center>
+    {% else %}
+        <center>Decrypted Matrix:{{txt}}</center>
+    {% endif %}
+</body>
+</html>

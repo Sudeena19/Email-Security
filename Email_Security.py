@@ -5,11 +5,8 @@ import numpy as np
 import random
 import timeit
 
-
-start_time = timeit.default_timer()
-
 def adjoint_matrix(matrix):
- 
+
     try:
         determinant = np.linalg.det(matrix)
         if(determinant!=0):
@@ -24,151 +21,121 @@ def adjoint_matrix(matrix):
         print("could not find cofactor matrix due to",e)
 
 
-x=input("input E-mail message :")    
-print("")        
-Key=int(input("input Public Key :"))
-print("")
+def encrypt(x,Key):
 
-final=[]
-ascii=[]
-messageKey=[]
-# converting message into ascii values
-for character in x:
-    ascii.append(ord(character))   
+    ascii=[]
+    messageKey=[]
+    # converting message into ascii values
+    for character in x:
+        ascii.append(ord(character))   
 
 
-#finding the length fof the message for matrix generation
-size=math.floor(math.sqrt(len(ascii)))+1
+    #finding the length fof the message for matrix generation
+    size=math.floor(math.sqrt(len(ascii)))+1
 
 
-#Encryption
+    #Encryption
 
-# ascii list is multplied with public key value 
-messageKey = [element * Key for element in ascii]
+    # ascii list is multplied with public key value 
+    messageKey = [element * Key for element in ascii]
 
-# converting list to matrix on size n*n
-n, m = size,size
+    # converting list to matrix on size n*n
+    n, m = size,size
 
-k = 0
-print("")
-print("size of the matrix : "+str(size))
-print("")
-#here msgMatrix is Message Matrix
-msgMatrix = []
+    k = 0
+    #here msgMatrix is Message Matrix
+    msgMatrix = []
 
-while n*m != len(ascii):
-
-    # checking if Matrix Possible else append 32 in remaining position
-    ascii.append(32)
-
-    # Constructing enciphered Matrix
-for idx in range(0, n):
-    sub = []
-    for jdx in range(0, m):
-        sub.append(ascii[k])
-        k += 1
-    msgMatrix.append(sub)
-
-# printing result
-print("Message Matrix ")
-print("")
-print(msgMatrix)
-
-print("")
-while n*m != len(messageKey):
+    while n*m != len(ascii):
 
         # checking if Matrix Possible else append 32 in remaining position
-    messageKey.append(32*Key)
+        ascii.append(32)
 
-n, m = size,size
-l=0
-#keyMsg is enciphered Matrix
-keyMsg=[]
-for idx1 in range(0, n):
-    sub1 = []
-    for jdx1 in range(0, m):
-        sub1.append(messageKey[l])
-        l += 1
-    keyMsg.append(sub1)
-print("")
-print("Enciphered Matrix")
-print("")
-print(keyMsg)
-print("")
+        # Constructing enciphered Matrix
+    for idx in range(0, n):
+        sub = []
+        for jdx in range(0, m):
+            sub.append(ascii[k])
+            k += 1
+        msgMatrix.append(sub)
 
-print(type(keyMsg))
+    while n*m != len(messageKey):
+            # checking if Matrix Possible else append 32 in remaining position
+        messageKey.append(32*Key)
 
-
-# decreption
-# uisng key value construction of a matrix 
-#genrating random matrix according to size of key value
-
-random_matrix = [[random.random() for e in range(len(keyMsg))] for e in range(len(keyMsg))]
-
+    n, m = size,size
+    l=0
+    #keyMsg is enciphered Matrix
+    keyMsg=[]
+    for idx1 in range(0, n):
+        sub1 = []
+        for jdx1 in range(0, m):
+            sub1.append(messageKey[l])
+            l += 1
+        keyMsg.append(sub1)
+    return keyMsg
 
 
-# converting random matrix into lower triangular matrix 
-for i in range(n):
-    for j in range(n):
-        if(i<j):
-            random_matrix[i][j]=0
+def decrypt(keyMsg,Key):
+    final=[]
+    # decreption
+    # uisng key value construction of a matrix 
+    #genrating random matrix according to size of key value
+    n=len(keyMsg)
+    random_matrix = [[random.random() for e in range(len(keyMsg))] for e in range(len(keyMsg))]
 
 
 
-for i in range(n):
-    for j in range(n):
-        if(i==j):
-            random_matrix[i][j]=1
-random_matrix[0][0]=Key
+    # converting random matrix into lower triangular matrix 
+    for i in range(n):
+        for j in range(n):
+            if(i<j):
+                random_matrix[i][j]=0
 
 
-det = np.linalg.det(random_matrix)
-round(det)
+
+    for i in range(n):
+        for j in range(n):
+            if(i==j):
+                random_matrix[i][j]=1
+    random_matrix[0][0]=Key
 
 
-adj_random=[]
-inverse_random_Matrix=[]
-inverse_adj_random=[]
-adj_random=adjoint_matrix(random_matrix)
+    det = np.linalg.det(random_matrix)
+    round(det)
 
 
-inverse_random_Matrix=np.linalg.inv(random_matrix)
-
-inverse_adj_random=np.linalg.inv(adj_random)
-
-
-Product_rand_adjrand=[]
-Product_rand_adjrand=np.dot(inverse_random_Matrix,inverse_adj_random) 
-
-decoded_matrix=[]
-decoded_matrix=np.dot(keyMsg,Product_rand_adjrand)
-print("**Deciphering ***")
-print("")
-print("")
-print("")
-print("")
-print("decipheed Matrix")
-print("")
-print(decoded_matrix)
-print("")
+    adj_random=[]
+    inverse_random_Matrix=[]
+    inverse_adj_random=[]
+    adj_random=adjoint_matrix(random_matrix)
 
 
-dec_list=[]
-dec_list=decoded_matrix.flatten()
+    inverse_random_Matrix=np.linalg.inv(random_matrix)
 
-dec_list = [int(round(x)) for x in dec_list]
-print(dec_list)
-decrepted_Message = "".join([chr(value) for value in dec_list])
+    inverse_adj_random=np.linalg.inv(adj_random)
 
 
-#printing deciphered Message
-final.append(decrepted_Message)
-print("")
-print("decihered message :")
-print("")
-print(''.join(final))
-print("")
-x=int(input())
-stop_time = timeit.default_timer()
+    Product_rand_adjrand=[]
+    Product_rand_adjrand=np.dot(inverse_random_Matrix,inverse_adj_random) 
 
-print('Time: ', stop_time - start_time)
+    decoded_matrix=[]
+    decoded_matrix=np.dot(keyMsg,Product_rand_adjrand)
+
+
+    dec_list=[]
+    dec_list=decoded_matrix.flatten()
+
+    dec_list = [int(round(x)) for x in dec_list]
+    decrepted_Message = "".join([chr(value) for value in dec_list])
+
+
+    #printing deciphered Message
+    final.append(decrepted_Message)
+    return decrepted_Message
+
+def main():
+    decrypt(encrypt("Hello User",123),123)
+
+if __name__=="__main__":
+    main()

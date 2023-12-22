@@ -7,26 +7,55 @@
         <title>Encrypt Message</title>
         <script>
             function warn(selectMenu){
-                if(selectMenu.value=="dec")
-                    alert("Enter all the values in the matrix as semi-colon(';') seperated values in a sequence and rows seperated by colons.");
+                if(selectMenu.value=="dec"){
+                    txtLabel.innerHTML="Upload the file.";
+                    txt.type="file";
+                    txt.value=null;
+                    form.enctype="multipart/form-data";
+                    fnameDiv.style.visibility="hidden";
+                }else{
+                    form.enctype=null;
+                    txtLabel.innerHTML="Enter your text:";
+                    txt.type="text";
+                    txt.value=null;
+                    fnameDiv.style.visibility="visible";
+                }
             }
         </script>
     </head>
     <body>
-        <center>
-            <form method="post" action="/">
-                <label for="txt">Enter your text:</label>&nbsp;
-                <input autofocus name="txt" id="txt" required/>
-                <br/><br/>
-                <label for="key">Enter public Key:</label>
-                <input name="key" id="key" required/>
-                <br/><br/>
-                <select name="action" onchange="warn(this)">
-                    <option value="enc">Encrypt</option>
-                    <option value="dec">Decrypt</option>
-                </select>
-                <input type="submit"/>
+        <table style="margin: auto; text-align: center;">
+            <form method="post" action="/" id="form">
+                <tr id="actionDiv">
+                    <td><label>Select your action:</label></td>
+                    <td>
+                        <select name="action" onchange="warn(this)">
+                            <option value="enc" selected>Encrypt</option>
+                            <option value="dec">Decrypt</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="txtDiv">
+                    <td><label for="txt" id="txtLabel">Enter your text:</label></td>
+                    <td><input autofocus name="txt" id="txt" required/></td>
+                </tr>
+                <tr id="keyDiv">
+                    <td><label for="key" id="keyLabel">Enter public Key:</label></td>
+                    <td><input name="key" id="key" required/></td>
+                </tr>
+                <tr id="fnameDiv">
+                    <td><label for="fname" id="fnameLabel">Enter a file name:</label></td>
+                    <td><input name="fname" id="fname"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;"><input type="submit"/></td>
+                </tr>
             </form>
-        </center>
+        </table>
+        <div>
+            {% if enc %}
+                <center>{{txt}}</center>
+            {% endif %}
+        </div>
     </body>
 </html>
